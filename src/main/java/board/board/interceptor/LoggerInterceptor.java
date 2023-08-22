@@ -24,7 +24,8 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         // 해당 요청의 URI가 "/css/style.css"인 경우 로그를 출력하지 않음
         if (!request.getRequestURI().equals("/css/style.css")) {
-        } else
-        log.debug("======================================           END          ======================================\n");
+        } else {
+            log.debug("======================================           END          ======================================\n");
+        }
     }
 }
