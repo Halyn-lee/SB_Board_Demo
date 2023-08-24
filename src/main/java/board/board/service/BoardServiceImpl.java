@@ -28,7 +28,7 @@ public class BoardServiceImpl implements BoardService{
     public BoardDto selectBoardDetail(int boardIdx) throws Exception{
         BoardDto board = boardMapper.selectBoardDetail(boardIdx);
         boardMapper.updateHitCount(boardIdx);
-
+        // int i = 10 / 0; 트랜잭션 설정 적용 확인 용도였음 (조회수 카운트 예외)
         return board;
     }
 
