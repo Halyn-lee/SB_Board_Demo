@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공통 에러 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+    <h1>공통 에러 페이지</h1>
+    <p th:text="${exception}"></p> <!-- 에러의 종류를 출력-->
+    <ul th:each="list : ${exception.getStackTrace()}"
+        th:text="${list.toString()}"></ul> <!-- 에러 상세 출력-->
+</body>
+</html>
