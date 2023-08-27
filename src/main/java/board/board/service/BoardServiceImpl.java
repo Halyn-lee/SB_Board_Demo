@@ -3,12 +3,15 @@ package board.board.service;
 import java.util.Iterator;
 import java.util.List;
 
+import board.board.common.FileUtils;
+import board.board.dto.BoardFileDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import board.board.dto.BoardDto;
 import board.board.mapper.BoardMapper;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -20,6 +23,9 @@ public class BoardServiceImpl implements BoardService{
     @Autowired
     private BoardMapper boardMapper;
 
+    @Autowired
+    private FileUtils fileUtils;
+
     @Override
     public List<BoardDto> selectBoardList() throws Exception {
         return boardMapper.selectBoardList();
@@ -27,22 +33,12 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void insertBoard(BoardDto board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
-        //boardMapper.insertBoard(board); 업로드 파일 정보 확인 목적으로 게시글 저장 x
-        if(ObjectUtils.isEmpty(multipartHttpServletRequest) == false){
-            Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
-            String name;
-            while(iterator.hasNext()){
-                name = iterator.next();
-                log.debug("file tag name : " + name);
-                List<MultipartFile> list = multipartHttpServletRequest.getFiles(name);
-                for(MultipartFile multipartFile : list){
-                    log.debug("start file information");
-                    log.debug("file name : " + multipartFile.getOriginalFilename());
-                    log.debug("file size : " + multipartFile.getSize());
-                    log.debug("file content type : " + multipartFile.getContentType());
-                    log.debug("END FILE INFORMATION.\n");
-                }
-            }
+        boardMapper.insertBoard(board);
+        // FileUtils 클래스를 이용하여 업로드 파일을 서버에 저장
+        List<BoardFileDto> list = fileUtils.parseFileInfo(board.getBoardIdx(), multipartHttpServletRequest);
+        // 파일 정보를 DB에 저장
+        if(CollectionUtils.isEmpty(list) == false){
+            boardMapper.insertBoardFileList(list);
         }
     }
 
@@ -50,7 +46,6 @@ public class BoardServiceImpl implements BoardService{
     public BoardDto selectBoardDetail(int boardIdx) throws Exception{
         BoardDto board = boardMapper.selectBoardDetail(boardIdx);
         boardMapper.updateHitCount(boardIdx);
-        // int i = 10 / 0; 트랜잭션 설정 적용 확인 용도였음 (조회수 카운트 예외)
         return board;
     }
 

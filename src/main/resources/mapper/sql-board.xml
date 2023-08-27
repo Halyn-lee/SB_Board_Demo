@@ -86,4 +86,33 @@
 				board_idx = #{boardIdx}
 		]]>
     </update>
+
+    <!-- 파일 정보 저장 쿼리-->
+    <insert id="insertBoardFileList" parameterType="board.board.dto.BoardFileDto">
+        <![CDATA[
+			INSERT INTO t_file
+			(
+				board_idx,
+				original_file_name,
+				stored_file_path,
+				file_size,
+				creator_id,
+				created_datetime
+			)
+			VALUES
+		]]>
+    <!-- 파일 목록 하나 이상이므로 foreach로 collection 반복 처리.
+     파라미터에 list라는 이름의 파일 정보 리스트를 item이라는 별칭을 사용하여 접근 -->
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.boardIdx},
+            #{item.originalFileName},
+            #{item.storedFilePath},
+            #{item.fileSize},
+            'admin',
+            NOW()
+            )
+        </foreach>
+    </insert>
 </mapper>
+
