@@ -130,5 +130,19 @@
 		]]>
     </select>
 
+    <select id="selectBoardFileInformation" parameterType="map" resultType="board.board.dto.BoardFileDto">
+        <![CDATA[
+			SELECT
+				original_file_name,
+				stored_file_path,
+				file_size
+			FROM
+				t_file
+			WHERE
+				idx = #{idx}
+				AND board_idx = #{boardIdx}
+				AND deleted_yn = 'N'
+		]]>
+    </select>
 </mapper>
 
