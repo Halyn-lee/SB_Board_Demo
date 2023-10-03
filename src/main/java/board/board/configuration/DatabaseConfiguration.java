@@ -17,6 +17,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.util.Properties;
+
 @Configuration
 @PropertySource("classpath:/application.properties")
 public class DatabaseConfiguration {
@@ -34,6 +36,12 @@ public class DatabaseConfiguration {
     @ConfigurationProperties(prefix="mybatis.configuration")
     public org.apache.ibatis.session.Configuration mybatisConfig(){
         return new org.apache.ibatis.session.Configuration();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix="spring.jpa")
+    public Properties hibernateConfig(){
+        return new Properties();
     }
 
     @Bean
