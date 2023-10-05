@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import board.board.entity.BoardFileEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,12 +19,13 @@ import board.board.dto.BoardFileDto;
 @Component
 public class FileUtils {
 
-    public List<BoardFileDto> parseFileInfo(int boardIdx, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception{
+    public List<BoardFileEntity> parseFileInfo(MultipartHttpServletRequest multipartHttpServletRequest) throws Exception{
+        // JPA의 @OneToMany 어노테이션으로 인해 첨부파일 클래스(BoardFileEntity)에 게시글 번호를 따로 저장할 필요가 없으므로 parseFileInfo 메서드의 파라미터에 게시글 번호를 받지 않음
         if(ObjectUtils.isEmpty(multipartHttpServletRequest)){
             return null;
         }
 
-        List<BoardFileDto> fileList = new ArrayList<>();
+        List<BoardFileEntity> fileList = new ArrayList<>();
         // 파일이 업로드될 폴더 생성
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMdd");
         ZonedDateTime current = ZonedDateTime.now();
@@ -64,11 +66,12 @@ public class FileUtils {
                     newFileName = Long.toString(System.nanoTime()) + originalFileExtension;
 
                     // DB에 저장할 파일 정보를 BoardFileDto에 저장
-                    BoardFileDto boardFile = new BoardFileDto();
-                    boardFile.setBoardIdx(boardIdx);
+                    BoardFileEntity boardFile = new BoardFileEntity();
+                    // boardFile.setBoardIdx(boardIdx);
                     boardFile.setFileSize(multipartFile.getSize());
                     boardFile.setOriginalFileName(multipartFile.getOriginalFilename());
                     boardFile.setStoredFilePath(path + "/" + newFileName);
+                    boardFile.setCreatorId("admin");
                     fileList.add(boardFile);
 
                     // 업로드된 파일을 새로운 이름으로 바꾸어 지정된 경로에 저장
