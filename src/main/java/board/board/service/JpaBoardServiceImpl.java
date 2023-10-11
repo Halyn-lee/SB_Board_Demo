@@ -11,26 +11,26 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import board.board.entity.BoardEntity;
 import board.board.entity.BoardFileEntity;
 import board.board.common.FileUtils;
+import board.board.repository.JpaBoardRepository;
 
 @Service
 public class JpaBoardServiceImpl implements JpaBoardService {
 
     @Autowired
-    JpaBoardRepository JpaBoardRepository;
+    JpaBoardRepository jpaBoardRepository;
 
     @Autowired
     FileUtils fileUtils;
 
     @Override
     public List<BoardEntity> selectBoardList() throws Exception {
-        return JpaBoardRepository.findAllByOrderByBoardIdxDesc();
+        return jpaBoardRepository.findAllByOrderByBoardIdxDesc();
         // 게시글 번호로 정렬하여 전체 게시글 목록 조회. 아직 리포지터리 작성 X
     }
 
     @Override
-    public void saveBoard(BoardEntity board, MultipartHttpServletRequest multipartHttpServletRequest, int hitCnt) throws Exception {
+    public void saveBoard(BoardEntity board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
         board.setCreatorId("admin");
-        board.setHitCnt(hitCnt);
         List<BoardFileEntity> list = fileUtils.parseFileInfo(multipartHttpServletRequest);
         // 첨부파일의 정보를 저장하는 클래스가 BoardFileDto에서 Entity로 변경되었으므로 FileUtils 클래스의 parseFileInfo 메서드를 새로 생성
         if(CollectionUtils.isEmpty(list) == false) {

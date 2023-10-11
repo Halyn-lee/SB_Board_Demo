@@ -12,11 +12,9 @@ public interface JpaBoardService {
 
     void saveBoard(BoardEntity board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception;
 
-    void saveBoard(BoardEntity board, MultipartHttpServletRequest multipartHttpServletRequest, int hitCnt) throws Exception;
-
     BoardEntity selectBoardDetail(int boardIdx) throws Exception;
 
-    void deleteBoard(int boardIdx);
+    void deleteBoard(int boardIdx) throws Exception;
 
     BoardFileEntity selectBoardFileInformation(int boardIdx, int idx) throws Exception;
 }
