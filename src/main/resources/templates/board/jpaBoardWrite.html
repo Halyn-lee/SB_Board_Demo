@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>board</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="container">
+    <h2>게시글 등록</h2>
+    <form id="frm" name="frm" method="post" action="/jpa/board/write"
+          enctype="multipart/form-data">
+        <!-- enctype : <input type="file">이 포함된 폼을 전송할 때 사용 -->
+        <table class="board_detail">
+            <tr>
+                <td>제목</td>
+                <td><input type="text" id="title" name="title"/></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea id="contents" name="contents"></textarea>
+                </td>
+            </tr>
+        </table>
+        <input type="file" id="files" name="files" multiple="multiple">
+        <!-- 파일 첨부 태그 -->
+        <input type="submit" id="submit" value="저장" class="btn">
+    </form>
+</div>
+</body>
+</html>
